@@ -26,3 +26,31 @@ This project implements a basketball management database system that tracks team
 3. Run `insert_data.sql`
 4. Execute queries from Queries folder
 
+## Folder and File Structure
+basketball-management-system-db/
+
+│── Project_Report.pdf
+│── Project_Video.mp4        (or video_link.txt)
+│── ER_Diagram.png
+│── Schema.sql
+│
+│── Project_Implementation/
+│     │
+│     ├── Tables/
+│     │     └── create_tables.sql
+│     │
+│     ├── Queries/
+│     │     ├── insert.sql
+│     │     ├── update.sql
+│     │     ├── delete.sql
+│     │     ├── search.sql
+│     │     └── reports.sql
+│     │
+│     ├── Views/
+│     │     └── views.sql
+│     │
+│     └── Screenshots/
+│           ├── tables_created.png
+│           ├── insert_example.png
+│           ├── query_results.png
+│           └── views_output.png
