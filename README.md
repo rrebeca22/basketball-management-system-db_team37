@@ -1,31 +1,30 @@
-# basketball-management-system-db_team37
+# Basketball Management System Database
 
-│── README.md
-│── ER_Diagram/
-│     └── ER_Diagram.png
-│
-│── Schema/
-│     └── schema.sql
-│
-│── Tables/
-│     └── create_tables.sql
-│
-│── Data/
-│     └── insert_data.sql
-│
-│── Queries/
-│     ├── basic_queries.sql
-│     ├── reports.sql
-│
-│── Views/
-│     └── views.sql
-│
-│── Screenshots/
-│     └── (all screenshots here)
-│
-│── Video/
-│     └── video_link.txt
-│
-│── Report/
-│     └── Project_Report.pdf
-│     └── Project_Report.pdf
+## Team Members
+- Marco Cerron
+- Christian Jones
+- Ryan Markowitz
+- Rebeca Reyes
+
+## Project Description
+This project implements a basketball management database system that tracks teams, players, coaches, stadiums, games, and player statistics.
+
+## Features
+- Manage teams, players, and coaches
+- Schedule games
+- Track player statistics
+- Query and filter data
+- Generate reports and views
+
+## Technologies Used
+- MySQL Workbench
+- SQL
+
+## How to Run
+1. Open MySQL Workbench
+2. Run `schema.sql`
+3. Run `insert_data.sql`
+4. Execute queries from Queries folder
+
+## AI Usage
+We used ChatGPT to assist with query writing and debugging.
