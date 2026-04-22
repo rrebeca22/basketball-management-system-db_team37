@@ -27,7 +27,7 @@ This project implements a basketball management database system that tracks team
 4. Execute queries from Queries folder
 
 ## Folder and File Structure
-basketball-management-system-db/
+basketball-management-system-db_team37/
 
 │── Project_Report.pdf
 │── Project_Video.mp4        (or video_link.txt)
