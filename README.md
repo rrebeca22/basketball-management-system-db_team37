@@ -1,5 +1,4 @@
 # basketball-management-system-db_team37
-Basketball Database Project
 
 │── README.md
 │── ER_Diagram/
@@ -28,4 +27,5 @@ Basketball Database Project
 │     └── video_link.txt
 │
 │── Report/
+│     └── Project_Report.pdf
 │     └── Project_Report.pdf
