@@ -26,5 +26,3 @@ This project implements a basketball management database system that tracks team
 3. Run `insert_data.sql`
 4. Execute queries from Queries folder
 
-## AI Usage
-We used ChatGPT to assist with query writing and debugging.
