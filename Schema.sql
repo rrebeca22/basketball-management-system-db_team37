@@ -11,9 +11,7 @@ CREATE DATABASE basketball_mgmt
 
 USE basketball_mgmt;
 
--- ============================================================
--- STADIUM
--- ============================================================
+-- Stadium table
 CREATE TABLE Stadium (
   stadium_id    INT            NOT NULL AUTO_INCREMENT,
   naming_rights VARCHAR(100)   NOT NULL,
@@ -23,9 +21,7 @@ CREATE TABLE Stadium (
   PRIMARY KEY (stadium_id)
 );
 
--- ============================================================
--- TEAM
--- ============================================================
+-- Team table
 CREATE TABLE Team (
   team_id     INT          NOT NULL AUTO_INCREMENT,
   name        VARCHAR(100) NOT NULL UNIQUE,
@@ -38,9 +34,7 @@ CREATE TABLE Team (
     ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
--- ============================================================
--- PLAYER
--- ============================================================
+-- Player table
 CREATE TABLE Player (
   player_id           INT            NOT NULL AUTO_INCREMENT,
   name                    VARCHAR(100)   NOT NULL,
@@ -63,9 +57,7 @@ CREATE TABLE Player (
     ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
--- ============================================================
--- COACH
--- ============================================================
+-- Coach table
 CREATE TABLE Coach (
   coach_id                INT            NOT NULL AUTO_INCREMENT,
   name                    VARCHAR(100)   NOT NULL,
@@ -80,9 +72,7 @@ CREATE TABLE Coach (
     ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
--- ============================================================
--- GAME
--- ============================================================
+-- Game table
 CREATE TABLE Game (
   game_id       INT            NOT NULL AUTO_INCREMENT,
   game_datetime DATETIME       NOT NULL,
@@ -104,9 +94,7 @@ CREATE TABLE Game (
     ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
--- ============================================================
--- PLAYER_STATS  (one row per player per game)
--- ============================================================
+-- Player_Stats table  (one row per player per game)
 CREATE TABLE Player_Stats (
   stat_id                 INT  NOT NULL AUTO_INCREMENT,
   player_id               INT  NOT NULL,
@@ -136,9 +124,7 @@ CREATE TABLE Player_Stats (
     CHECK (free_throws_made <= free_throws_attempted)
 );
 
--- ============================================================
--- INDEXES for common query patterns
--- ============================================================
+-- Indexing for common query patterns
 CREATE INDEX idx_player_team     ON Player (team_id);
 CREATE INDEX idx_player_position ON Player (position);
 CREATE INDEX idx_player_salary   ON Player (salary);
@@ -150,11 +136,9 @@ CREATE INDEX idx_game_stadium    ON Game (stadium_id);
 CREATE INDEX idx_stats_player    ON Player_Stats (player_id);
 CREATE INDEX idx_stats_game      ON Player_Stats (game_id);
 
--- ============================================================
--- VIEWS  (commonly-used reports as reusable virtual tables)
--- ============================================================
+-- Views
 
--- Season averages per player
+-- Season averages per player view
 CREATE OR REPLACE VIEW vw_player_season_avg AS
 SELECT
   p.player_id,
@@ -182,7 +166,7 @@ JOIN Team t          ON t.team_id   = p.team_id
 LEFT JOIN Player_Stats ps ON ps.player_id = p.player_id
 GROUP BY p.player_id, p.name, p.position, t.name;
 
--- League standings
+-- League standings view
 CREATE OR REPLACE VIEW vw_standings AS
 SELECT
   t.team_id,
@@ -196,7 +180,7 @@ FROM Team t
 JOIN Stadium s ON s.stadium_id = t.stadium_id
 ORDER BY win_pct DESC;
 
--- Game schedule (shows outcome when played, TBD when not)
+-- Game schedule (shows outcome when played, TBD when not) view
 CREATE OR REPLACE VIEW vw_schedule AS
 SELECT
   g.game_id,
@@ -219,13 +203,12 @@ JOIN Team    ht ON ht.team_id   = g.home_team_id
 JOIN Team    at ON at.team_id   = g.away_team_id
 JOIN Stadium s  ON s.stadium_id = g.stadium_id;
 
--- ============================================================
--- STORED PROCEDURES
--- ============================================================
+-- Procedures
 
 DELIMITER $$
 
 -- Record a game outcome and update team win/loss records
+-- UPDATE FUNCTIONALITY
 CREATE PROCEDURE sp_record_game_result (
   IN p_game_id    INT,
   IN p_home_score INT,
@@ -255,6 +238,7 @@ BEGIN
 END$$
 
 -- Add / update a player's stat line for a specific game
+-- 
 CREATE PROCEDURE sp_upsert_player_stats (
   IN p_player_id             INT,
   IN p_game_id               INT,
@@ -298,9 +282,7 @@ END$$
 
 DELIMITER ;
 
--- ============================================================
--- SAMPLE DATA
--- ============================================================
+-- Inserting data (Show insert functionality)
 
 INSERT INTO Stadium (naming_rights, city, state, max_capacity) VALUES
   ('Chase Center',           'San Francisco', 'CA', 18064),
@@ -336,45 +318,46 @@ INSERT INTO Game (game_datetime, ticket_price, home_team_id, away_team_id, stadi
   ('2025-10-26 17:30:00', 275.00, 2, 3, 2),
   ('2025-10-28 19:00:00', 350.00, 4, 1, 4);
 
--- Record the first game result
+-- Game results recorded
 CALL sp_record_game_result(1, 115, 108);
 
--- Add stat lines for game 1
+-- Adding player statistics for first game.
 CALL sp_upsert_player_stats(1, 1, 36, 32, 4, 8, 2, 0, 3, 11, 22, 8, 9);   -- Curry
 CALL sp_upsert_player_stats(2, 1, 28, 18, 3, 2, 1, 0, 2,  7, 16, 3, 4);   -- Klay
 CALL sp_upsert_player_stats(3, 1, 38, 28, 7, 6, 3, 2, 4, 10, 20, 7, 8);   -- LeBron
 CALL sp_upsert_player_stats(4, 1, 32, 22, 11, 1, 2, 4, 3,  9, 17, 4, 6);  -- A. Davis
 
+-- Removing a player (DELETE functionality):
+DELETE FROM Player_Stats WHERE player_id = 8;
+DELETE FROM Player WHERE player_id = 8;
 
--- ============================================================
--- EXAMPLE QUERIES (run individually in Workbench)
--- ============================================================
+-- Query examples:
 
 -- 1. League standings
--- SELECT * FROM vw_standings;
+SELECT * FROM vw_standings;
 
 -- 2. Full schedule
--- SELECT * FROM vw_schedule ORDER BY game_datetime;
+SELECT * FROM vw_schedule ORDER BY game_datetime;
 
 -- 3. Season averages for all players, sorted by PPG
--- SELECT * FROM vw_player_season_avg ORDER BY ppg DESC;
+SELECT * FROM vw_player_season_avg ORDER BY ppg DESC;
 
 -- 4. Filter players by position
--- SELECT name, team_name, ppg, rpg, apg
--- FROM vw_player_season_avg
--- WHERE position = 'Center'
--- ORDER BY ppg DESC;
+SELECT name, team_name, ppg, rpg, apg
+FROM vw_player_season_avg
+WHERE position = 'Center'
+ORDER BY ppg DESC;
 
 -- 5. Roster salary search: players earning $30M+ with 2+ years left
--- SELECT name, position, salary, contract_years_remaining
--- FROM Player p
--- JOIN Team t ON t.team_id = p.team_id
--- WHERE salary >= 30000000 AND contract_years_remaining >= 2
--- ORDER BY salary DESC;
+SELECT name, position, salary, contract_years_remaining
+FROM Player p
+JOIN Team t ON t.team_id = p.team_id
+WHERE salary >= 30000000 AND contract_years_remaining >= 2
+ORDER BY salary DESC;
 
 -- 6. Games at a specific stadium
--- SELECT * FROM vw_schedule WHERE venue = 'Chase Center';
+SELECT * FROM vw_schedule WHERE venue = 'Chase Center';
 
 -- 7. Games within a date range
--- SELECT * FROM vw_schedule
--- WHERE game_datetime BETWEEN '2025-10-22' AND '2025-10-28';
+SELECT * FROM vw_schedule
+WHERE game_datetime BETWEEN '2025-10-22' AND '2025-10-28';
