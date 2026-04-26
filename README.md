@@ -29,28 +29,24 @@ This project implements a basketball management database system that tracks team
 ## Folder and File Structure
 basketball-management-system-db_team37/
 
-│── Project_Report.pdf
-│── Project_Video.mp4        (or video_link.txt)
-│── ER_Diagram.png
-│── Schema.sql
-│
-│── Project_Implementation/
-│     │
-│     ├── Tables/
-│     │     └── create_tables.sql
-│     │
-│     ├── Queries/
-│     │     ├── insert.sql
-│     │     ├── update.sql
-│     │     ├── delete.sql
-│     │     ├── search.sql
-│     │     └── reports.sql
-│     │
-│     ├── Views/
-│     │     └── views.sql
-│     │
-│     └── Screenshots/
-│           ├── tables_created.png
-│           ├── insert_example.png
-│           ├── query_results.png
-│           └── views_output.png
+Project_Report.pdf
+Project_Video.mp4        (or video_link.txt)
+ER_Diagram.png
+Schema.sql
+
+Project_Implementation/
+  Tables/
+    Tables_Structure.sql
+    Data_Inserted.sql
+  
+  Queries/
+    Queries_Example.sql
+
+  Views/
+    Views_Created.sql
+
+  Screenshots/
+    Data_Inserted/
+    Query_Execution_Results/
+    Tables_Created/
+    Views_Output/
