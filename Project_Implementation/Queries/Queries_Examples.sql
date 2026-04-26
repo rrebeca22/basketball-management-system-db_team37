@@ -12,13 +12,13 @@ SELECT * FROM vw_schedule ORDER BY game_datetime;
 SELECT * FROM vw_player_season_avg ORDER BY ppg DESC;
 
 -- 4. Showing Center position players
-SELECT name, team_name, ppg, rpg, apg
+SELECT player_name, team_name, ppg, rpg, apg
 FROM vw_player_season_avg
 WHERE position = 'Center'
 ORDER BY ppg DESC;
 
 -- 5. Roster salary search: players earning $30M+ with 2+ years left
-SELECT name, position, salary, contract_years_remaining
+SELECT p.name, position, salary, contract_years_remaining
 FROM Player p
 JOIN Team t ON t.team_id = p.team_id
 WHERE salary >= 30000000 AND contract_years_remaining >= 2

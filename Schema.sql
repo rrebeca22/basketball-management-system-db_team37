@@ -36,15 +36,15 @@ CREATE TABLE Team (
 
 -- Player table
 CREATE TABLE Player (
-  player_id           INT            NOT NULL AUTO_INCREMENT,
-  name                    VARCHAR(100)   NOT NULL,
-  position                ENUM(
-                            'Point Guard',
-                            'Shooting Guard',
-                            'Small Forward',
-                            'Power Forward',
-                            'Center'
-                          )              NOT NULL,
+  player_id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(100) NOT NULL,
+  position ENUM(
+	'Point Guard',
+	'Shooting Guard',
+    'Small Forward',
+    'Power Forward',
+    'Center'
+    ) NOT NULL,
   salary                  DECIMAL(12,2)  NOT NULL CHECK (salary >= 0),
   contract_years_remaining INT           NOT NULL CHECK (contract_years_remaining >= 0),
   age                     INT            NOT NULL CHECK (age BETWEEN 18 AND 50),
@@ -136,8 +136,15 @@ CREATE INDEX idx_game_stadium    ON Game (stadium_id);
 CREATE INDEX idx_stats_player    ON Player_Stats (player_id);
 CREATE INDEX idx_stats_game      ON Player_Stats (game_id);
 
--- Views
+-- Show Tables created
+DESCRIBE stadium;
+DESCRIBE Team;
+DESCRIBE Player;
+DESCRIBE Coach;
+DESCRIBE Game;
+DESCRIBE Player_Stats;
 
+-- Views
 -- Season averages per player view
 CREATE OR REPLACE VIEW vw_player_season_avg AS
 SELECT
@@ -204,7 +211,6 @@ JOIN Team    at ON at.team_id   = g.away_team_id
 JOIN Stadium s  ON s.stadium_id = g.stadium_id;
 
 -- Procedures
-
 DELIMITER $$
 
 -- Record a game outcome and update team win/loss records
@@ -318,8 +324,25 @@ INSERT INTO Game (game_datetime, ticket_price, home_team_id, away_team_id, stadi
   ('2025-10-26 17:30:00', 275.00, 2, 3, 2),
   ('2025-10-28 19:00:00', 350.00, 4, 1, 4);
 
+-- Show data inserted
+SELECT * FROM Stadium;
+SELECT * FROM Team;
+SELECT * FROM Player;
+SELECT * FROM Coach;
+SELECT * FROM Game;
+SELECT * FROM Player_Stats;
+
+-- Show views before procedure calls:
+SELECT * FROM vw_standings;
+SELECT * FROM vw_schedule;
+SELECT * FROM vw_player_season_avg;
+
 -- Game results recorded
 CALL sp_record_game_result(1, 115, 108);
+
+-- Show updated Game and Team table after calling sp_record_game_result();
+SELECT * FROM Game;
+SELECT * FROM Team;
 
 -- Adding player statistics for first game.
 CALL sp_upsert_player_stats(1, 1, 36, 32, 4, 8, 2, 0, 3, 11, 22, 8, 9);   -- Curry
@@ -327,12 +350,18 @@ CALL sp_upsert_player_stats(2, 1, 28, 18, 3, 2, 1, 0, 2,  7, 16, 3, 4);   -- Kla
 CALL sp_upsert_player_stats(3, 1, 38, 28, 7, 6, 3, 2, 4, 10, 20, 7, 8);   -- LeBron
 CALL sp_upsert_player_stats(4, 1, 32, 22, 11, 1, 2, 4, 3,  9, 17, 4, 6);  -- A. Davis
 
+-- Show updated Player_Stats table after calling sp_upsert_player_stats();
+SELECT * FROM Player_Stats;
+
 -- Removing a player (DELETE functionality):
 DELETE FROM Player_Stats WHERE player_id = 8;
 DELETE FROM Player WHERE player_id = 8;
 
--- Query examples:
+-- Shows updated Player table after deleting a player.
+SELECT * FROM Player;
 
+
+-- Query examples:
 -- 1. League standings
 SELECT * FROM vw_standings;
 
