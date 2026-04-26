@@ -22,9 +22,7 @@ This project implements a basketball management database system that tracks team
 
 ## How to Run
 1. Open MySQL Workbench
-2. Run `schema.sql`
-3. Run `insert_data.sql`
-4. Execute queries from Queries folder
+2. Run `Schema.sql"
 
 ## Folder and File Structure
 basketball-management-system-db_team37/
