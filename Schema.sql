@@ -353,9 +353,11 @@ CALL sp_upsert_player_stats(4, 1, 32, 22, 11, 1, 2, 4, 3,  9, 17, 4, 6);  -- A. 
 -- Show updated Player_Stats table after calling sp_upsert_player_stats();
 SELECT * FROM Player_Stats;
 
+SELECT * FROM Player WHERE player_id = 1;
+
 -- Removing a player (DELETE functionality):
-DELETE FROM Player_Stats WHERE player_id = 8;
-DELETE FROM Player WHERE player_id = 8;
+DELETE FROM Player_Stats WHERE player_id = 1;
+DELETE FROM Player WHERE player_id = 1;
 
 -- Shows updated Player table after deleting a player.
 SELECT * FROM Player;
@@ -372,13 +374,13 @@ SELECT * FROM vw_schedule ORDER BY game_datetime;
 SELECT * FROM vw_player_season_avg ORDER BY ppg DESC;
 
 -- 4. Filter players by position
-SELECT name, team_name, ppg, rpg, apg
+SELECT player_name, team_name, ppg, rpg, apg
 FROM vw_player_season_avg
 WHERE position = 'Center'
 ORDER BY ppg DESC;
 
 -- 5. Roster salary search: players earning $30M+ with 2+ years left
-SELECT name, position, salary, contract_years_remaining
+SELECT p.name, position, salary, contract_years_remaining
 FROM Player p
 JOIN Team t ON t.team_id = p.team_id
 WHERE salary >= 30000000 AND contract_years_remaining >= 2
